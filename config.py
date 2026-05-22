@@ -14,6 +14,16 @@ class AppConfig:
         self._init_email_config()
         self._validate_config()
  
+        self.voice_language_options = {
+            "English": "en-US",
+            "Hindi": "hi-IN",
+            "Tamil": "ta-IN"
+        }
+        self.voice_language = os.getenv(
+            "VOICE_LANGUAGE",
+            self.settings.get('voice', {}).get('language', 'en-US')
+        )
+ 
         self.llm_model_name = os.getenv("LLM_MODEL", self.settings['llm']['model'] if hasattr(self, 'settings') and 'llm' in self.settings else "gemma-7b")
         self.llm = ChatGroq(
             api_key=os.getenv("GROQ_API_KEY", ""),

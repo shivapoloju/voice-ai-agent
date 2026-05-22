@@ -1,148 +1,179 @@
-# 🏥 Medora AI - Smart Medical Appointment System
+# 🎙️ Voice AI Agent - Multilingual Appointment Assistant
 
-## Why Do We Need Medora AI?
+Voice AI Agent is a voice-first medical appointment system that supports English, हिंदी (Hindi), and தமிழ் (Tamil). It lets users book, cancel, and manage medical appointments naturally using voice or text while giving staff a dashboard to monitor and adjust bookings.
 
-Modern healthcare and service industries face significant challenges in managing appointments efficiently. Traditional booking systems are often manual, time-consuming, and prone to errors or double-bookings. Patients and clients expect seamless, real-time interactions—preferably through natural language and voice—while providers need intelligent scheduling that adapts to their availability and priorities.
+## Project Overview
 
-**Medora AI** addresses these needs by providing:
-- **Frictionless, voice-first appointment booking** for patients and clients.
-- **Intelligent, multi-agent orchestration** that optimizes scheduling, resolves conflicts, and adapts to urgency.
-- **Automated notifications and reminders** to reduce no-shows and improve communication.
-- **A scalable, extensible platform** ready for future AI advancements.
+Voice AI Agent is designed to simplify appointment scheduling through conversational interaction. The system combines browser-based audio capture, speech recognition, text-to-speech, and a lightweight multi-agent orchestration layer to manage user intent, doctor recommendations, and scheduling.
 
----
+### What this project does
 
-## 🌟 What Can Medora AI Do Right Now?
+- Accepts natural language input via chat or voice.
+- Converts speech to text using language-aware recognition.
+- Processes requests through a multi-agent scheduler.
+- Generates spoken responses in the same selected language.
+- Sends confirmation emails for booked appointments.
+- Displays appointments in a Streamlit dashboard for manual review.
 
-- **Conversational Booking:** Users can book, cancel, or check appointments using natural language—via chat or voice.
-- **Voice Interaction:** Speak to the system and hear responses back, making the experience accessible and hands-free. (Now powered by `streamlit-audiorec` for reliable browser-based recording.)
-- **Multi-Agent Intelligence:** Three specialized AI agents (User Bot, Doctor Bot, Scheduler Bot) collaborate to understand user intent, recommend doctors, and manage scheduling.
-- **Hybrid LLM/Intent Architecture:** Routine actions (like booking/canceling) are handled by the orchestrator for reliability; all other queries are answered directly by a powerful LLM (default: `llama3-8b-8192` on Groq).
-- **Smart Scheduling:** The system checks doctor/provider availability, validates time slots, and prevents double-booking.
-- **Conflict Resolution:** If a requested slot is unavailable, the system suggests alternatives in real time.
-- **Priority Handling:** Urgent and emergency requests are prioritized using a Model Context Protocol (MCP).
-- **Email Notifications:** Users receive booking confirmations, cancellations, and reminders automatically.
-- **Dashboard & Manual Controls:** Staff can view, add, or cancel appointments directly from the dashboard.
-- **Doctor Directory:** Users can browse available doctors, their specialties, and schedules.
+### Why it matters
 
----
+- Reduces manual phone booking overhead.
+- Supports multilingual users in Hindi and Tamil.
+- Improves accessibility with voice-first interaction.
+- Prevents scheduling conflicts and double bookings.
+- Automates reminders and confirmations.
 
-## 🛠️ Technology Stack
+## How it works
 
-- **Python 3.8+**
-- **Streamlit:** For the interactive web UI.
-- **LangChain & LangGraph:** For multi-agent orchestration and conversational AI.
-- **Groq LLM (`llama3-8b-8192`):** For advanced language understanding and generation.
-- **gTTS, pygame, SpeechRecognition:** For text-to-speech and speech-to-text capabilities.
-- **streamlit-audiorec:** For browser-based audio recording.
-- **smtplib, email:** For sending email notifications and reminders.
-- **dotenv, yaml:** For configuration management.
-- **Logging:** For robust monitoring and debugging.
-- **pytz, numpy, sounddevice, vosk:** For time zone handling and audio processing.
+The application flow is:
 
----
+1. User opens the Streamlit app.
+2. User selects a voice language: English, Hindi, or Tamil.
+3. User records audio or types a request.
+4. The app converts speech to text using `SpeechRecognition` and Google Recognizer with the selected language.
+5. The request is forwarded to the scheduling logic.
+6. The system responds with chat text and generated audio using `gTTS`.
+7. Appointment details are saved in session state and can be viewed or cancelled from the dashboard.
 
-## 🚀 Real-World Problems Solved
+## Architecture and components
 
-- **Manual Scheduling Hassles:** Eliminates the need for phone calls or manual entry by enabling conversational, automated booking.
-- **Double-Booking & Conflicts:** Prevents scheduling errors by checking provider availability and resolving conflicts dynamically.
-- **Missed Appointments:** Reduces no-shows with automated reminders and confirmations.
-- **Accessibility:** Makes appointment management easier for users with disabilities or those who prefer voice interaction.
-- **Urgency Management:** Ensures that urgent and emergency cases are prioritized appropriately.
-- **Scalability:** Supports multiple providers and can be extended to other industries (consultants, salons, etc.).
-- **Staff Efficiency:** Frees up administrative staff from repetitive scheduling tasks.
+- `app.py`: Main Streamlit interface, voice controls, chat history, and manual booking UI.
+- `config.py`: Loads YAML settings, environment variables, and voice language configuration.
+- `voice_agent.py`: Handles speech-to-text and text-to-speech, including locale selection.
+- `audio_interface.py`: Provides browser audio recorder and audio player components.
+- `utils.py`: Appointment state initialization and helper functions.
+- `email_service.py`: Sends booking confirmation emails.
+- `multi_agent_system.py`: Orchestrates the AI-based appointment processing.
+- `settings.yaml`: Configurable prompts, doctor schedules, voice defaults, and email settings.
 
----
+## Technology Stack
 
-## 🔮 Future: Integrating the Agent Development Kit (ADK)
+- Python 3.8+
+- Streamlit UI
+- SpeechRecognition for ASR
+- gTTS for TTS
+- streamlit-audiorec for browser audio recording
+- Groq LLM integration
+- YAML and environment-based configuration
 
-While Medora AI already leverages a robust multi-agent system, integrating an **Agent Development Kit (ADK)** in the future will unlock even greater capabilities:
+## Supported Languages
 
-- **Continuous Learning:** Agents can adapt to user preferences, learn from historical booking patterns, and personalize recommendations.
-- **Custom Agent Creation:** Easily add new agents for specialized tasks (e.g., insurance verification, follow-up scheduling).
-- **Plug-and-Play Upgrades:** Swap or upgrade agent logic without rewriting the core system.
-- **Advanced Analytics:** Use ADK to analyze appointment trends, provider utilization, and user satisfaction.
-- **Cross-Domain Expansion:** Extend the system to other domains (legal, education, wellness) by developing new agent modules.
+- English (`en-US`)
+- Hindi (`hi-IN`)
+- Tamil (`ta-IN`)
 
----
-
-## 🧑‍💻 Getting Started
+## Local Setup
 
 ### Prerequisites
 
-- Python 3.8 or higher
-- Streamlit
-- Required Python packages (see `requirements.txt`)
+- Python 3.8 or newer
+- `pip` package manager
+- Browser with microphone support
 
-### Installation
+### Install dependencies
+
+From the project root:
 
 ```bash
-git clone https://github.com/extremecoder-rgb/medoraAI.git
-cd medora-ai
+cd projectdirectory
 pip install -r requirements.txt
+```
+
+### Optional configuration
+
+Create a `.env` file in the project folder to override defaults:
+
+```env
+GROQ_API_KEY=your_groq_api_key
+VOICE_LANGUAGE=en-US
+SMTP_SERVER=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USERNAME=your_email@example.com
+SMTP_PASSWORD=your_email_password
+SENDER_EMAIL=your_email@example.com
+```
+
+If you do not use email features, the app still works for voice and appointment scheduling.
+
+### Run the app locally
+
+Start the Streamlit server:
+
+```bash
 streamlit run app.py
 ```
 
----
+Open the URL shown in the terminal (usually `http://localhost:8501`).
 
-## 📚 Usage
+### Use the app
 
-- **Book an Appointment:**  
-  Start a conversation with "I would like to book an appointment" or use the voice input (mic button next to chat input).
-- **Check Availability:**  
-  Ask "Show me available doctors" or "What are the next available appointments?"
-- **Manage Appointments:**  
-  View, cancel, or add appointments via the dashboard or chat.
-- **Receive Notifications:**  
-  Get email confirmations and reminders automatically.
+1. Select the desired voice language from the dropdown.
+2. Press the microphone button to record voice input.
+3. Speak a request such as:
+   - "Book an appointment with a cardiologist"
+   - "Cancel my appointment"
+   - "Show me available doctors"
+4. The assistant will reply by text and audio.
+5. Manage appointments from the right-side dashboard.
 
----
+## Configuration details
 
-## ⚡ Troubleshooting
+### `settings.yaml`
 
-### Voice Input Issues
-- Make sure your browser has microphone access enabled.
-- If you see "Voice processing failed", try speaking clearly and for at least 2 seconds.
-- Ensure you have a stable internet connection (Google Speech Recognition API is used).
-- If you see a detailed error, check the stack trace for audio format or permission issues.
+- `llm`: Model name, temperature, and max tokens.
+- `voice.language`: Default voice language.
+- `email.templates_dir`: Location of email templates.
+- `doctor_schedules`: Available doctor schedules and specialties.
 
-### LLM/AI Issues
-- If you see errors like `model_not_found` or 404, update your `.env` or `settings.yaml` to use a supported model (e.g., `llama3-8b-8192`).
-- Make sure your `GROQ_API_KEY` is correct and you have access to the selected model.
-- Restart the app after changing model settings.
+### `.env` variables
 
----
+- `GROQ_API_KEY`: API key for Groq LLM access.
+- `VOICE_LANGUAGE`: Default voice language code (`en-US`, `hi-IN`, `ta-IN`).
+- `SMTP_SERVER`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `SENDER_EMAIL`: Email notification settings.
 
-## 🤝 Contributing
+## Troubleshooting
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+- Confirm browser microphone permissions are allowed.
+- Use clear speech and a stable connection.
+- If speech recognition returns wrong text, verify the selected language.
+- If text-to-speech fails, ensure `gTTS` supports the selected locale.
+- Check `app.log` for detailed runtime errors.
 
----
+## Deploying online
 
-## 📝 License
+This project is already prepared for Render deployment with `render.yaml`.
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+### Deploy on Render
 
----
+1. Push your code to GitHub.
+2. Sign in to Render (render.com) and create a new Web Service.
+3. Connect your GitHub repository.
+4. Render will detect `render.yaml` and use the configured build/start commands.
+5. Add environment variables in Render:
+   - `GROQ_API_KEY`
+   - `VOICE_LANGUAGE` (optional, default `en-US`)
+   - `SMTP_SERVER`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `SENDER_EMAIL` (if email notifications are needed)
+6. Deploy the service and open the public URL Render provides.
 
-## 🙏 Acknowledgments
+### What Render does for you
 
-- Built with Streamlit
-- Powered by Groq LLM (`llama3-8b-8192`)
-- Voice processing by PyAudio, gTTS, SpeechRecognition, and streamlit-audiorec
-- Multi-agent architecture inspired by LangChain
+- Installs required system packages for audio support.
+- Installs Python dependencies from `requirements.txt`.
+- Runs `streamlit run app.py`.
+- Exposes the app online on a public URL.
 
----
+### Alternative hosting options
 
-## 📞 Support
+- Streamlit Community Cloud: good for simple Streamlit apps, but may require custom build tweaks for audio dependencies.
+- Railway / Fly.io / PythonAnywhere: suitable if you want another hosting provider.
+- Docker-based deployment: build a container with audio dependencies and deploy to any container host.
 
-For support, email hsuswiowkskow@gmail.com or open an issue in the repository.
+## Contribution guidelines
 
----
+1. Fork the repository.
+2. Create a new branch: `git checkout -b feature/your-feature`.
+3. Make your changes and commit them.
+4. Push your branch and open a pull request.
 
-Made with ❤️ by Subhranil Mondal
-```
+
+

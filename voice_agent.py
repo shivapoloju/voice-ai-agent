@@ -16,7 +16,7 @@ import json
 logger = setup_logger(__name__)
 
 class VoiceAgent:
-    def __init__(self):
+    def __init__(self, default_voice_language="en-US"):
         try:
             
             os.environ['SDL_AUDIODRIVER'] = 'dummy'
@@ -40,6 +40,7 @@ class VoiceAgent:
             self.recognizer.non_speaking_duration = 0.1
             self.audio_queue = queue.Queue()
             self.is_recording = False
+            self.voice_language = default_voice_language
             
             logger.info("VoiceAgent initialized successfully")
             
@@ -70,7 +71,7 @@ class VoiceAgent:
            
             with sr.AudioFile(temp_file) as source:
                 audio = self.recognizer.record(source)
-                text = self.recognizer.recognize_google(audio)
+                text = self.recognizer.recognize_google(audio, language=self.voice_language)
            
             try:
                 os.unlink(temp_file)
@@ -90,7 +91,8 @@ class VoiceAgent:
                 
             logger.info(f"Converting text to speech: {text}")
             temp_file = os.path.join(self.temp_dir, f"tts_{int(time.time())}.mp3")
-            tts = gTTS(text=text, lang='en', slow=False)
+            tts_lang = self._tts_language()
+            tts = gTTS(text=text, lang=tts_lang, slow=False)
             tts.save(temp_file)
             
         
@@ -109,6 +111,18 @@ class VoiceAgent:
         except Exception as e:
             logger.error(f"Error in text to speech: {str(e)}")
             return None
+
+    def set_language(self, language_code: str):
+        self.voice_language = language_code
+        logger.info(f"VoiceAgent language set to: {language_code}")
+
+    def _tts_language(self):
+        if not self.voice_language:
+            return "en"
+        language_code = self.voice_language.split('-')[0].lower()
+        if language_code in {"en", "hi", "ta"}:
+            return language_code
+        return "en"
 
     def get_audio_html(self, text):
         audio_data = self.text_to_speech(text)

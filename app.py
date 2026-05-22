@@ -17,9 +17,14 @@ def main():
     config = AppConfig()
     initialize_session_state()
 
+    if 'voice_language' not in st.session_state:
+        st.session_state.voice_language = config.voice_language
+
     if 'voice_agent' not in st.session_state:
-        st.session_state.voice_agent = VoiceAgent()
-        st.session_state.last_spoken_message = None  
+        st.session_state.voice_agent = VoiceAgent(default_voice_language=st.session_state.voice_language)
+        st.session_state.last_spoken_message = None
+    else:
+        st.session_state.voice_agent.set_language(st.session_state.voice_language)
   
     if 'multi_agent_conversation' not in st.session_state:
         st.session_state.multi_agent_conversation = []
@@ -33,6 +38,7 @@ def main():
    
     st.title("🏥 Smart Medical Appointment System")
     st.markdown("*Powered by Multi-Agent AI - User Bot, Doctor Bot & Scheduler Bot*")
+    st.markdown("**Supports English, हिंदी (Hindi), and தமிழ் (Tamil) voice input/output.**")
     
     # Create three columns for the layout
     col1, col2, col3 = st.columns([2, 1, 1])
@@ -83,7 +89,7 @@ def main():
                     recognizer = sr.Recognizer()
                     with sr.AudioFile(temp_wav.name) as source:
                         audio = recognizer.record(source)
-                        text = recognizer.recognize_google(audio)
+                        text = recognizer.recognize_google(audio, language=st.session_state.voice_language)
                     process_user_input(text)
                     st.session_state.show_audio_recorder = False
                     st.rerun()
@@ -207,7 +213,17 @@ def main():
         st.success("✅ User Bot: Active")
         st.success("✅ Doctor Bot: Active") 
         st.success("✅ Scheduler Bot: Active")
-        
+
+        selected_language = st.selectbox(
+            "🌍 Select voice/input language",
+            list(config.voice_language_options.keys()),
+            index=list(config.voice_language_options.keys()).index(
+                next((label for label, code in config.voice_language_options.items() if code == st.session_state.voice_language), "English")
+            ),
+            help="Choose the language for voice recognition and text-to-speech output."
+        )
+        st.session_state.voice_language = config.voice_language_options[selected_language]
+        st.session_state.voice_agent.set_language(st.session_state.voice_language)
         
         st.markdown("---")
         st.markdown("**➕ Manual Booking:**")
