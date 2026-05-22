@@ -2,7 +2,6 @@ import asyncio
 import tempfile
 import os
 from gtts import gTTS
-import pygame
 from logger import setup_logger
 import time
 import speech_recognition as sr
@@ -21,13 +20,9 @@ class VoiceAgent:
             
             os.environ['SDL_AUDIODRIVER'] = 'dummy'
             
-           
-            if not pygame.mixer.get_init():
-                try:
-                    pygame.mixer.init(devicename='dummy')
-                except Exception as e:
-                    logger.error(f"Failed to initialize pygame mixer: {e}")
-                    logger.warning("Text-to-speech functionality will be disabled")
+            try:
+            except Exception as e:
+                logger.warning("Text-to-speech functionality will be disabled")
             
             self._loop = None
             self.temp_dir = tempfile.gettempdir()
