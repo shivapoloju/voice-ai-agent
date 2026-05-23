@@ -2,7 +2,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 def audio_recorder():
-    """Create an audio recorder interface using HTML5."""
+    """Create an audio recorder Interface using HTML5."""
     html = """
     <div style="padding: 10px; border: 1px solid #e0e0e0; border-radius: 5px; background-color: #f8f9fa;">
         <div style="margin-bottom: 10px;">
