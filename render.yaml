@@ -17,3 +17,4 @@ services:
         value: 1.7.1
     healthCheckPath: /_stcore/health
     autoDeploy: true 
+    
