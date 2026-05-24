@@ -42,7 +42,6 @@ def add_manual_appointment(person_name, appointment_type, appointment_date, appo
         st.session_state.email_service.send_booking_confirmation(new_appointment)
 
 def cancel_appointment(appointment_index: int) -> bool:
-    
     try:
         if 'appointments' in st.session_state and 0 <= appointment_index < len(st.session_state.appointments):
            
