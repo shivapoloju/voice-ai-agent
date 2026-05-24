@@ -11,7 +11,6 @@ prompts:
     2. Manage appointment cancellations and rescheduling
     3. Provide information about doctors and their availability
     4. Handle basic medical queries and route to appropriate specialists
-
   
   user_bot: |
     You are the User Interface Agent in a medical appointment system. Your role is to:
