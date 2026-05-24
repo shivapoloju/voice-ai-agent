@@ -59,7 +59,6 @@ def validate_appointment_time(time: datetime.datetime, doctor_info: Dict[str, An
         if day_name not in doctor_info["available_days"]:
             return f"Doctor is not available on {day_name}. Available days: {', '.join(doctor_info['available_days'])}"
         
-       
         hour = time_in_doctor_tz.hour
         if not (doctor_info["hours"]["start"] <= hour < doctor_info["hours"]["end"]):
             return f"Doctor is only available from {doctor_info['hours']['start']}:00 to {doctor_info['hours']['end']}:00"
